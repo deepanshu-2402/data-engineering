@@ -1,0 +1,93 @@
+{
+    "name": "DBToADLS",
+    "properties": {
+        "activities": [
+            {
+                "name": "customerCount",
+                "type": "DatabricksNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Users/deepanshusaini2402@gmail.com/customerCount"
+                },
+                "linkedServiceName": {
+                    "referenceName": "APIToJSON",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "customerCountCheck",
+                "type": "IfCondition",
+                "dependsOn": [
+                    {
+                        "activity": "customerCount",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "expression": {
+                        "value": "@greater(int(activity('customerCount').output.runOutput), 500)\n\n\n",
+                        "type": "Expression"
+                    },
+                    "ifTrueActivities": [
+                        {
+                            "name": "customerExport",
+                            "type": "DatabricksNotebook",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "notebookPath": "/Users/deepanshusaini2402@gmail.com/customerExport"
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "APIToJSON",
+                                "type": "LinkedServiceReference"
+                            }
+                        },
+                        {
+                            "name": "childPipeline",
+                            "type": "ExecutePipeline",
+                            "dependsOn": [],
+                            "policy": {
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "pipeline": {
+                                    "referenceName": "childPipeline",
+                                    "type": "PipelineReference"
+                                },
+                                "waitOnCompletion": true,
+                                "parameters": {
+                                    "customerCount": {
+                                        "value": "@activity('customerCount').output.runOutput\n\n\n",
+                                        "type": "Expression"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2025-07-08T16:18:50Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

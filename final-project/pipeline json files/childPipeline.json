@@ -1,0 +1,54 @@
+{
+    "name": "childPipeline",
+    "properties": {
+        "activities": [
+            {
+                "name": "customerCountForChild",
+                "type": "IfCondition",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "expression": {
+                        "value": "@greater(int(string(pipeline().parameters.customerCount)), 600)\n\n\n\n\n\n\n",
+                        "type": "Expression"
+                    },
+                    "ifTrueActivities": [
+                        {
+                            "name": "productExport",
+                            "type": "DatabricksNotebook",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "notebookPath": "/Users/deepanshusaini2402@gmail.com/productExport"
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "APIToJSON",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "customerCount": {
+                "type": "string"
+            }
+        },
+        "variables": {
+            "debugCount": {
+                "type": "String"
+            }
+        },
+        "annotations": [],
+        "lastPublishTime": "2025-07-08T16:18:49Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

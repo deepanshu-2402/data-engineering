@@ -1,0 +1,30 @@
+{
+    "name": "restAPIToJSON",
+    "properties": {
+        "activities": [
+            {
+                "name": "restAPI-JSON",
+                "type": "DatabricksNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Users/deepanshusaini2402@gmail.com/apiToJson"
+                },
+                "linkedServiceName": {
+                    "referenceName": "APIToJSON",
+                    "type": "LinkedServiceReference"
+                }
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2025-07-08T09:42:57Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}
