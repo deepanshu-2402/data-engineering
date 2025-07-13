@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "name": "Lara Sharma",
+    "email": "lara@yahoo.com",
+    "address": {
+      "street": "B-Street",
+      "city": "London",
+      "zipcode": "92398-3834"
+    },
+    "company": {
+      "name": "Amazon"
+    }
+  }
+]
